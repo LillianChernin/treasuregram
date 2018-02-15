@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Treasure
 from .forms import TreasureForm
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 
 def index(request):
     treasures = Treasure.objects.all()
@@ -22,5 +23,11 @@ def post_treasure(request):
             value=form.cleaned_data['value'],
             material=form.cleaned_data['material'],
             location=form.cleaned_data['location'])
+        treasure.user = request.user
         treasure.save()
     return HttpResponseRedirect('/')
+
+def profile(request, username):
+    user = User.objects.get(username=username)
+    treasures = Treasure.objects.filter(user=user)
+    return render(request, 'profile.html', {'username': username, 'treasures': treasures})
