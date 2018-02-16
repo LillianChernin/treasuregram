@@ -12,5 +12,6 @@ class Treasure(models.Model):
     models.SET_NULL,
     blank=True,
     null=True,)
+    likes = models.IntegerField(default=0)
     def __str__(self):
 	    return self.name

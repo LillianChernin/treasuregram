@@ -52,3 +52,18 @@ def login_view(request):
     else:
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+   
+def like_treasure(request):
+    treasure_id = request.GET.get('treasure_id', None)
+
+    likes = 0
+    if (treasure_id):
+        treasure = Treasure.objects.get(id=int(treasure_id))
+        if treasure is not None:
+            likes = treasure.likes + 1
+            treasure.likes = likes
+            treasure.save()
+    return HttpResponse(likes)
